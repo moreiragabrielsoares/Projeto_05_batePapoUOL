@@ -14,29 +14,22 @@ function cadastrarUser () {
 
     const requisicao = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', cadastroUser);
 
-    requisicao.then(tratarSucesso);
-    requisicao.catch(tratarErro);
+    requisicao.then(tratarSucessoCadastro);
+    requisicao.catch(tratarErroCadastro);
 }
 
-function tratarSucesso (response) {
-    const resposta = response.data;
-    console.log("deu certo");
-    console.log(response);
+function tratarSucessoCadastro (response) {
     setInterval(manterConexao, 4000);
     buscarMsgs();
     setInterval(buscarMsgs, 3000);
 }
 
-function tratarErro (erro){
-    const resposta = erro.response.status;
-    console.log("deu errado");
-    console.log(resposta);
+function tratarErroCadastro (erro){
     alert("Este nome já está sendo utilizado. Escolha outro lindo nome.")
     perguntarNome();
 }
 
 function manterConexao () {
-    console.log("Mantendo conexão");
     const cadastroUser = {
         name: nomeUser
     }
@@ -46,7 +39,6 @@ function manterConexao () {
 }
 
 function buscarMsgs () {
-    console.log("buscando");
     const promisse = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
     promisse.then(processarResposta);    
 }
@@ -80,7 +72,29 @@ function processarResposta (resposta) {
             <span>${textoMsg}</span>
             </li>`
         }
+    }
+}
 
+function enviarMsg() {
+    console.log("Enviando");
+    const textoMsg = document.querySelector("input").value;
+    const obj = {
+        from: nomeUser,
+        to: "Todos",
+        text: textoMsg,
+        type: "message"
     }
 
+    const requisicao = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', obj);
+
+    requisicao.then(tratarSucessoEnvioMsg);
+    requisicao.catch(tratarErroEnvioMsg);
+}
+
+function tratarSucessoEnvioMsg() {
+    buscarMsgs();
+}
+
+function tratarErroEnvioMsg() {
+    window.location.reload();
 }
