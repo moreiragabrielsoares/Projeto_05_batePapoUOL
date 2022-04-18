@@ -19,7 +19,6 @@ function cadastrarUser () {
 }
 
 function tratarSucessoCadastro (response) {
-    console.log("Cadastro Feito");
     manterConexao();
     setInterval(manterConexao, 4000);
     buscarMsgs();
@@ -32,7 +31,6 @@ function tratarErroCadastro (erro){
 }
 
 function manterConexao () {
-    console.log("Mantendo conexão");
     const cadastroUser = {
         name: nomeUser
     }
@@ -42,7 +40,6 @@ function manterConexao () {
 }
 
 function buscarMsgs () {
-    console.log("Buscando msgs");
     const promisse = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
     promisse.then(processarResposta);    
 }
@@ -57,8 +54,9 @@ function processarResposta (resposta) {
     let textoMsg;
     let tipoMsg;
     let horaMsg;
+    let ultPos = resposta.data.length - 1;
 
-    for (let i = 0; i < resposta.data.length - 1; i++) {
+    for (let i = 0; i < ultPos; i++) {
         emissorMsg = resposta.data[i].from;
         destMsg = resposta.data[i].to;
         textoMsg = resposta.data[i].text;
@@ -70,7 +68,7 @@ function processarResposta (resposta) {
             <span class="hora">(${horaMsg})&nbsp</span>
             <span class="user">${emissorMsg}&nbsp</span>
             <span class="texto-msg">${textoMsg}</span>
-            </li>`
+           </li>`
         }
 
         if (tipoMsg === "message") {
@@ -83,7 +81,7 @@ function processarResposta (resposta) {
             </li>`
         }
 
-        if (tipoMsg === "private-message") {
+        if (tipoMsg === "private_message" && (destMsg === nomeUser || destMsg === "Todos")) {
             ul.innerHTML += `<li class="private-msg">
             <span class="hora">(${horaMsg})&nbsp</span>
             <span class="user">${emissorMsg}&nbsp</span>
@@ -94,11 +92,11 @@ function processarResposta (resposta) {
         }
     }
 
-    emissorMsg = resposta.data[resposta.data.length - 1].from;
-    destMsg = resposta.data[resposta.data.length - 1].to;
-    textoMsg = resposta.data[resposta.data.length - 1].text;
-    tipoMsg = resposta.data[resposta.data.length - 1].type;
-    horaMsg = resposta.data[resposta.data.length - 1].time;
+    emissorMsg = resposta.data[ultPos].from;
+    destMsg = resposta.data[ultPos].to;
+    textoMsg = resposta.data[ultPos].text;
+    tipoMsg = resposta.data[ultPos].type;
+    horaMsg = resposta.data[ultPos].time;
 
     if (tipoMsg === "status") {
         ul.innerHTML += `<li class="status-msg">
@@ -118,7 +116,7 @@ function processarResposta (resposta) {
         </li>`
     }
 
-    if (tipoMsg === "private-message") {
+    if (tipoMsg === "private_message" && (destMsg === nomeUser || destMsg === "Todos")) {
         ul.innerHTML += `<li class="private-msg">
         <span class="hora">(${horaMsg})&nbsp</span>
         <span class="user">${emissorMsg}&nbsp</span>
