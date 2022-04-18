@@ -4,6 +4,7 @@
 
 body {
     font-family: 'Roboto', sans-serif;
+    background-color: #f3f3f3;
 }
 
 .topo {
@@ -27,12 +28,51 @@ body {
 
 .container-msgs {
     margin-top: 90px;
+    margin-bottom: 90px;
     width: 375px;
     height: 100%;
     background-color: #f3f3f3;
     display: flex;
     flex-direction: column;
+    font-size: 14px;
+    overflow-wrap: break-word;
 }
+
+.container-msgs li {
+    padding: 5px;
+    border-radius: 2px;
+    min-height: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 4px 0;
+}
+
+.status-msg {
+    background-color: #DCDCDC;
+}
+
+.normal-msg {
+    background-color: #FFFFFF;
+}
+
+.private-msg {
+    background-color: #FFDEDE;
+}
+
+.hora {
+    color: #aaaaaa;
+}
+
+.user, .destinatario {
+    font-weight: 700;
+}
+
+
+span {
+    max-width: 370px;
+}  
+
 
 .bottom-msg {
     width: 375px;
