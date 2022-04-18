@@ -2,10 +2,10 @@ let nomeUser;
 
 function perguntarNome () {
     nomeUser = prompt("Qual o seu lindo nome?");
+    cadastrarUser();
 }
 
 perguntarNome();
-cadastrarUser();
 
 function cadastrarUser () {
     const cadastroUser = {
@@ -22,16 +22,31 @@ function tratarSucesso (response) {
     const resposta = response.data;
     console.log("deu certo");
     console.log(response);
+    setInterval(manterConexao, 4000);
     buscarMsgs();
+    setInterval(buscarMsgs, 3000);
 }
 
 function tratarErro (erro){
-    const resposta = erro.data;
+    const resposta = erro.response.status;
     console.log("deu errado");
     console.log(resposta);
+    alert("Este nome já está sendo utilizado. Escolha outro lindo nome.")
+    perguntarNome();
+}
+
+function manterConexao () {
+    console.log("Mantendo conexão");
+    const cadastroUser = {
+        name: nomeUser
+    }
+    
+    axios.post('https://mock-api.driven.com.br/api/v6/uol/status', cadastroUser);
+
 }
 
 function buscarMsgs () {
+    console.log("buscando");
     const promisse = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
     promisse.then(processarResposta);    
 }
